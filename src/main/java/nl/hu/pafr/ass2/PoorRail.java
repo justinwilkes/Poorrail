@@ -70,11 +70,12 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 	private int currentTrain = -1;
 	private final int OFFSET = 100;
 	private final int TRAINLENGTH = 100;
-	
-	
+		
 	private double[] weights = new double[] { 0.1, 0.1, 0.1, 0.1 };
 	private int[]    heights = new int[]    { 7,   7,   7,   7   }; 
 	
+	
+	// On run
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -90,6 +91,7 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 		super();
 		initGUI();
 	}
+	
 	
 	
 	// Create the GUI
@@ -127,14 +129,16 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 			jPanel2Layout.rowHeights = heights;
 			jPanel2Layout.columnWeights = weights;
 			jPanel2Layout.columnWidths = heights;
-			tpTextTrain.setText("train name:");
+			tpTextTrain.setText("Train Name: ");
+			
+			
 			
 			tfNewTrain = new JTextField(20);
 			jPanel2.add(tfNewTrain, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 			
 			btnNewTrain = new JButton();
 			jPanel2.add(btnNewTrain, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-			btnNewTrain.setText("make new train");
+			btnNewTrain.setText("Create New Train");
 			btnNewTrain.addActionListener(this);
 			
 			ComboBoxModel cbAllTrainsModel = new DefaultComboBoxModel(new String[] { });
@@ -144,12 +148,12 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 			
 			btnChooseTrain = new JButton();
 			jPanel2.add(btnChooseTrain, new GridBagConstraints(2, 1, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-			btnChooseTrain.setText("select train");
+			btnChooseTrain.setText("Select Train");
 			btnChooseTrain.addActionListener(this);
 			
 			btnDeleteTrain = new JButton();
 			jPanel2.add(btnDeleteTrain, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-			btnDeleteTrain.setText("delete train");
+			btnDeleteTrain.setText("Delete Train");
 			btnDeleteTrain.addActionListener(this);
 			
 			pnlWagons = new JPanel();
@@ -162,9 +166,11 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 			pnlWagons.setLayout(jPanel3Layout);
 			pnlWagons.setBorder(BorderFactory.createEtchedBorder(BevelBorder.LOWERED));
 		
+			
+			
 			tfCurrentTrain = new JTextField();
 			pnlWagons.add(tfCurrentTrain, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
-			tfCurrentTrain.setText("selected: ");
+			tfCurrentTrain.setText("Selected: ");
 		
 			
 			
@@ -215,6 +221,8 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 		}
 	}
 	
+	
+	
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource()== btnNewTrain) {
 			Train train = new Train(tfNewTrain.getText());
@@ -224,8 +232,7 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 				currentTrain = cbAllTrains.getSelectedIndex();
 				drawTrain(train);
 			}
-		}
-		else if (event.getSource() == btnChooseTrain) {
+		} else if (event.getSource() == btnChooseTrain) {
 			if (cbAllTrains.getItemCount() > 0) {
 				String selection = (String)cbAllTrains.getSelectedItem();
 				tfCurrentTrain.setText("selected: " + selection);
@@ -284,6 +291,7 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 	
 	public String addTrain(Train train) {
 		String t = "";
+		
 		try {
 			t = train.getName().trim();
 			for (int i = 0; i < cbAllTrains.getItemCount();i++ ) {
