@@ -12,6 +12,10 @@ public class Train {
 		return this.name;
 	}
 	
+	public boolean hasName() {
+		return (this.name != "");
+	}
+	
 	
 	
 }

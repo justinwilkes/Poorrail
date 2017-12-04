@@ -21,6 +21,7 @@ import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.SwingUtilities;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -64,7 +65,8 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 	private HashMap numberOfWagons;
 	
 	private JTextPane tpTextTrain;
-
+	
+	private Train selectedTrain = null;
 	
 	private int currentNumberOfWagons;
 	private int currentTrain = -1;
@@ -73,6 +75,8 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 		
 	private double[] weights = new double[] { 0.1, 0.1, 0.1, 0.1 };
 	private int[]    heights = new int[]    { 7,   7,   7,   7   }; 
+	
+	private ArrayList<Wagon> wagons = new ArrayList<Wagon>();
 	
 	
 	// On run
@@ -224,7 +228,7 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 	
 	
 	public void actionPerformed(ActionEvent event) {
-		if (event.getSource()== btnNewTrain) {
+		if (event.getSource() == btnNewTrain) {
 			Train train = new Train(tfNewTrain.getText());
 			
 			if (train.getName() != null && train.getName().trim().length() > 0)	{
@@ -234,8 +238,11 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 			}
 		} else if (event.getSource() == btnChooseTrain) {
 			if (cbAllTrains.getItemCount() > 0) {
-				String selection = (String)cbAllTrains.getSelectedItem();
-				tfCurrentTrain.setText("selected: " + selection);
+				String selection = (String) cbAllTrains.getSelectedItem();
+				
+				selectedTrain = new Train(selection);
+				
+				tfCurrentTrain.setText("Selected: " + selection);
 				int ti = cbAllTrains.getSelectedIndex();
 				if (ti != currentTrain)	numberOfWagons.put(currentTrain, currentNumberOfWagons);
 				currentTrain = ti;
@@ -245,30 +252,19 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 					currentNumberOfWagons = 0;
 				}			
 			}
-		} else if (event.getSource() == btnDeleteTrain) {
-			
-			// If there are trains
-			if (cbAllTrains.getItemCount() > 0) {
-				
-				// Get selected train name
-				String selectedTrain = (String) cbAllTrains.getSelectedItem();
-				
-				// Remove selected train from all trains combobox
-				cbAllTrains.removeItemAt(cbAllTrains.getSelectedIndex());
-				
-				// Remove train from gui
+		} else if (event.getSource() == btnDeleteTrain) {			
+			if (cbAllTrains.getItemCount() > 0) {				
+				String selectedTrain = (String) cbAllTrains.getSelectedItem();			
+				cbAllTrains.removeItemAt(cbAllTrains.getSelectedIndex());				
 				numberOfWagons.remove(selectedTrain);
-				
-				// Redraw the canvas
-				repaint();
-				
+				repaint();				
 				
 				if (selectedTrain != null) {
 					currentTrain = cbAllTrains.getSelectedIndex();
-					tfCurrentTrain.setText("selected: " + selectedTrain);
+					tfCurrentTrain.setText("Selected: " + selectedTrain);
 				} else {
 					currentTrain = 0;
-					tfCurrentTrain.setText("selected: ");
+					tfCurrentTrain.setText("Selected: ");
 				}
 			}
 		} else if (event.getSource() == btnAddWagon1) {
@@ -281,13 +277,45 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 			currentNumberOfWagons++;
 			drawWagon(new Wagon("Wagon3"));
 		} else if (event.getSource() == btnDeleteWagon1) {
+			
+			for(int i = 0; i < wagons.size(); i++) {
+				Wagon wagon__ = wagons.get(i);
+				if(wagon__.getName().equals("Wagon1")) {
+					if(wagon__.getTrain().getName().equals(selectedTrain.getName())) {
+						// Delete this item from array
+						wagons.remove(wagon__);
+					}
+				}
+			}
+			
+			
+		
+			
+			// Clear the drawings
 			repaint((30 + TRAINLENGTH), (80 + currentTrain * OFFSET), 1, 1);
+			
+			
+			// Redraw the others
+//			for(int i = 0; i < wagons.size(); i++) {
+//				Wagon wagon_ = wagons.get(i);
+//				Wagon newWagon = new Wagon(wagon_.getName());
+//				newWagon.setTrain(wagon_.getTrain());
+//				drawWagon(newWagon);			
+//			}
+			
+			
+			
+			
 		} else if (event.getSource() == btnDeleteWagon2) {
 			repaint((30 + TRAINLENGTH), (80 + currentTrain * OFFSET), 1, 1);		
 		} else if (event.getSource() == btnDeleteWagon3) {
 			repaint((30 + TRAINLENGTH), (80 + currentTrain * OFFSET), 1, 1);		
 		}
 	}
+	
+	
+	
+	// Create a train
 	
 	public String addTrain(Train train) {
 		String t = "";
@@ -314,9 +342,11 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 	
 	
 	
-	//Draws Train 
+	
+	// Draw the Train 
+	
 	public void drawTrain(Train train)	{
-		if (train.getName() != "") {
+		if (train.hasName()) {
 			Graphics g = drawPanel.getGraphics();
 			
 			// Draw train
@@ -335,18 +365,27 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
     }
 	
 	
+	
 	// Draws Wagon
+	
 	public void drawWagon(Wagon wagon) {
-		Graphics g = drawPanel.getGraphics();
 		
-		// Draw Wagon
-		g.setColor(Color.LIGHT_GRAY);
-		g.fillRect((30 + currentNumberOfWagons * TRAINLENGTH), (80 + currentTrain * OFFSET), 80, 40);
-		
-		// Draw Wheels
-		g.setColor(Color.BLACK);
-		g.fillRoundRect((35 + currentNumberOfWagons * TRAINLENGTH), (120 + currentTrain * OFFSET), 20, 20, 20, 20);
-		g.fillRoundRect((80 + currentNumberOfWagons * TRAINLENGTH), (120 + currentTrain * OFFSET), 20, 20, 20, 20);
-		g.drawString(wagon.getName(), (40 + currentNumberOfWagons * TRAINLENGTH), (105 + currentTrain * OFFSET));
+		if(selectedTrain != null) {
+			// Add to list, first add the train to the wagon object
+			wagon.setTrain(selectedTrain);
+			wagons.add(wagon);			
+			
+			Graphics g = drawPanel.getGraphics();
+			
+			// Draw Wagon
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillRect((30 + currentNumberOfWagons * TRAINLENGTH), (80 + currentTrain * OFFSET), 80, 40);
+			
+			// Draw Wheels
+			g.setColor(Color.BLACK);
+			g.fillRoundRect((35 + currentNumberOfWagons * TRAINLENGTH), (120 + currentTrain * OFFSET), 20, 20, 20, 20);
+			g.fillRoundRect((80 + currentNumberOfWagons * TRAINLENGTH), (120 + currentTrain * OFFSET), 20, 20, 20, 20);
+			g.drawString(wagon.getName(), (40 + currentNumberOfWagons * TRAINLENGTH), (105 + currentTrain * OFFSET));
+		}		
     }
 }
