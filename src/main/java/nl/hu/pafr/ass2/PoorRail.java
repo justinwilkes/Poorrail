@@ -278,16 +278,27 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 			drawWagon(new Wagon("Wagon3"));
 		} else if (event.getSource() == btnDeleteWagon1) {
 			
+			System.out.println("-------");
+			
+			
+			
+			ArrayList<Wagon> wagonsList = new ArrayList<Wagon>();
+			
+			
+			
 			// Loop through the array of current wagons
-			for(int i = 0; i < wagons.size(); i++) {
+			for(int i = 0; i < wagons.size(); i++) {	
+				
+				// Get the wagon object from the array
 				Wagon wagon__ = wagons.get(i);
-				// If name is the Wagon1 (so only wagon1 can be removed)
-				if(wagon__.getName().equals("Wagon1")) {
-					// If the name of the train is the same
-					if(wagon__.getTrain().getName().equals(selectedTrain.getName())) {
-						// Delete this item from array
-						wagons.remove(wagon__);
-					}
+				
+				
+				
+				
+				if((wagon__.getName().equals("Wagon1")) && (wagon__.getTrain().getName().equals(selectedTrain.getName()))) {
+										 
+				} else {
+					wagonsList.add(wagon__);
 				}
 			}
 			
@@ -297,21 +308,24 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 					
 			
 			// Clear the drawings
-			repaint((30 + TRAINLENGTH), (80 + currentTrain * OFFSET), 1, 1);			
+			repaint(((30 + TRAINLENGTH)  + wagonsList.size() * 100), ((80 + currentTrain * OFFSET)), 1, 1);			
 			
 			
 			// set lengthArray, otherwise the loop will continue FOREVER
-			int lengthArray = wagons.size();
+			int lengthArray = wagonsList.size();
 			
+			wagons.clear();
 						
+			
+			
+			
 			// Redraw the other wagons - loop through the array of wagons
 			for(int i = 0; i < lengthArray; i++) {
 				
 				// Get the wagon object
-				Wagon wagon_ = wagons.get(i);
+				Wagon wagon_ = wagonsList.get(i);
 				
-				// Create new Wagon object from the array
-				Wagon newWagon = new Wagon(wagon_.getName());
+				
 				
 				// Add a number for wagons
 				currentNumberOfWagons++;
@@ -320,8 +334,12 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 				//newWagon.setTrain(wagon_.getTrain());
 				
 				// Draw the wagon
-				drawWagon(new Wagon(newWagon.getName()));			
-			}			
+				drawWagon(wagon_);
+				
+				// Remove the wagon object from the array
+				
+			}	
+			
 			
 		} else if (event.getSource() == btnDeleteWagon2) {
 			repaint((30 + TRAINLENGTH), (80 + currentTrain * OFFSET), 1, 1);		
@@ -395,8 +413,10 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 			// Add to the list
 			wagons.add(wagon);			
 			
+			
 			// Just for testing, print out the name of the given wagon and the current number of wagons
 			System.out.println(wagon.getName() + ", " + currentNumberOfWagons);
+			
 			
 			// Get graphics panel
 			Graphics g = drawPanel.getGraphics();
