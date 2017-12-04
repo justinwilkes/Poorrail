@@ -276,24 +276,16 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 		} else if (event.getSource() == btnAddWagon3) {
 			currentNumberOfWagons++;
 			drawWagon(new Wagon("Wagon3"));
-		} else if (event.getSource() == btnDeleteWagon1) {
-			
-			System.out.println("-------");
+		} else if (event.getSource() == btnDeleteWagon1) {			
 			
 			
-			
-			ArrayList<Wagon> wagonsList = new ArrayList<Wagon>();
-			
-			
+			ArrayList<Wagon> wagonsList = new ArrayList<Wagon>();	
 			
 			// Loop through the array of current wagons
-			for(int i = 0; i < wagons.size(); i++) {	
+			for(int i = 0; i < wagons.size(); i++) {
 				
 				// Get the wagon object from the array
 				Wagon wagon__ = wagons.get(i);
-				
-				
-				
 				
 				if((wagon__.getName().equals("Wagon1")) && (wagon__.getTrain().getName().equals(selectedTrain.getName()))) {
 										 
@@ -314,8 +306,7 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 			// set lengthArray, otherwise the loop will continue FOREVER
 			int lengthArray = wagonsList.size();
 			
-			wagons.clear();
-						
+			wagons.clear();						
 			
 			
 			
@@ -323,28 +314,115 @@ public class PoorRail extends javax.swing.JFrame implements ActionListener {
 			for(int i = 0; i < lengthArray; i++) {
 				
 				// Get the wagon object
-				Wagon wagon_ = wagonsList.get(i);
-				
+				Wagon wagon_ = wagonsList.get(i);		
 				
 				
 				// Add a number for wagons
 				currentNumberOfWagons++;
-				
-				
-				//newWagon.setTrain(wagon_.getTrain());
-				
+								
 				// Draw the wagon
-				drawWagon(wagon_);
-				
-				// Remove the wagon object from the array
+				drawWagon(wagon_);	
 				
 			}	
 			
 			
 		} else if (event.getSource() == btnDeleteWagon2) {
-			repaint((30 + TRAINLENGTH), (80 + currentTrain * OFFSET), 1, 1);		
+			
+			ArrayList<Wagon> wagonsList = new ArrayList<Wagon>();	
+			
+			// Loop through the array of current wagons
+			for(int i = 0; i < wagons.size(); i++) {
+				
+				// Get the wagon object from the array
+				Wagon wagon__ = wagons.get(i);
+				
+				if((wagon__.getName().equals("Wagon2")) && (wagon__.getTrain().getName().equals(selectedTrain.getName()))) {
+										 
+				} else {
+					wagonsList.add(wagon__);
+				}
+			}
+			
+			
+			// Reset the current number
+			currentNumberOfWagons = 0;
+					
+			
+			// Clear the drawings
+			repaint(((30 + TRAINLENGTH)  + wagonsList.size() * 100), ((80 + currentTrain * OFFSET)), 1, 1);			
+			
+			
+			// set lengthArray, otherwise the loop will continue FOREVER
+			int lengthArray = wagonsList.size();
+			
+			wagons.clear();						
+			
+			
+			
+			// Redraw the other wagons - loop through the array of wagons
+			for(int i = 0; i < lengthArray; i++) {
+				
+				// Get the wagon object
+				Wagon wagon_ = wagonsList.get(i);		
+				
+				
+				// Add a number for wagons
+				currentNumberOfWagons++;
+								
+				// Draw the wagon
+				drawWagon(wagon_);	
+				
+			}	
+			
+			
 		} else if (event.getSource() == btnDeleteWagon3) {
-			repaint((30 + TRAINLENGTH), (80 + currentTrain * OFFSET), 1, 1);		
+			
+
+			ArrayList<Wagon> wagonsList = new ArrayList<Wagon>();	
+			
+			// Loop through the array of current wagons
+			for(int i = 0; i < wagons.size(); i++) {
+				
+				// Get the wagon object from the array
+				Wagon wagon__ = wagons.get(i);
+				
+				if((wagon__.getName().equals("Wagon3")) && (wagon__.getTrain().getName().equals(selectedTrain.getName()))) {
+										 
+				} else {
+					wagonsList.add(wagon__);
+				}
+			}
+			
+			
+			// Reset the current number
+			currentNumberOfWagons = 0;
+					
+			
+			// Clear the drawings
+			repaint(((30 + TRAINLENGTH)  + wagonsList.size() * 100), ((80 + currentTrain * OFFSET)), 1, 1);			
+			
+			
+			// set lengthArray, otherwise the loop will continue FOREVER
+			int lengthArray = wagonsList.size();
+			
+			wagons.clear();						
+			
+			
+			
+			// Redraw the other wagons - loop through the array of wagons
+			for(int i = 0; i < lengthArray; i++) {
+				
+				// Get the wagon object
+				Wagon wagon_ = wagonsList.get(i);		
+				
+				
+				// Add a number for wagons
+				currentNumberOfWagons++;
+								
+				// Draw the wagon
+				drawWagon(wagon_);	
+				
+			}	
 		}
 	}
 	
